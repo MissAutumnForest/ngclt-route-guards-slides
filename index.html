@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+		<title>Angular Guards</title>
 
 		<link rel="stylesheet" href="css/reveal.css">
 		<link rel="stylesheet" href="css/theme/black.css">
@@ -87,7 +87,13 @@
 
           <section data-markdown>
             <textarea data-template>
-              ### To put it simply...
+              A route guard is some code that runs between the "`NavigationStart`" and "`NavigationEnd`" router events.
+            </textarea>
+          </section>
+
+          <section data-markdown>
+            <textarea data-template>
+              ### Or to put it simply...
               A route guard is just some code that runs between when the user navigates to a route and when the component associated with that route renders.
             </textarea>
           </section>
@@ -95,6 +101,131 @@
           <section data-markdown>
             <textarea data-template>
               The component associated with the route will only render if the return value of the guard is `true`.
+            </textarea>
+          </section>
+        </section>
+
+        <section>
+          <section data-markdown>
+            <textarea data-template>
+              # What can you use route guards for?
+            </textarea>
+          </section>
+
+          <section data-markdown>
+            <textarea data-template>
+              - Prevent users from accessing a page until authenticated
+              - Prevent certain users from accessing a page based on an arbitrary piece of data <!-- .element: class="fragment" -->
+              - Fetch / Process data before showing the route <!-- .element: class="fragment" -->
+              - Confirm with the user if they really would like to leave <!-- .element: class="fragment" -->
+              - Notify the user of pending unsaved changes before the next route loads <!-- .element: class="fragment" -->
+              - etc... <!-- .element: class="fragment" -->
+            </textarea>
+          </section>
+        </section>
+
+        <section>
+          <section data-markdown>
+            <textarea data-template>
+              # Okay show me the code already! :D
+            </textarea>
+          </section>
+
+          <section data-markdown>
+            <textarea data-template>
+              # There are three different types of route guards
+            </textarea>
+          </section>
+
+          <section data-markdown>
+            <textarea data-template>
+              ## Can Activate
+
+              This will only resolve a route if the return value is true.
+
+              ```
+              @Injectable({
+                providedIn: 'root'
+              })
+              export class ExampleGuard implements CanActivate {
+                canActivate(
+                  next: ActivatedRouteSnapshot,
+                  state: RouterStateSnapshot
+                ): Observable<boolean> | Promise<boolean> | boolean {
+                  return true;
+                }
+              }
+              ```
+            </textarea>
+          </section>
+
+          <section data-markdown>
+            <textarea data-template>
+              ## Can Activate Child
+
+              This will only resolve a child route if the return value is true.
+
+              ```
+              @Injectable({
+                providedIn: 'root'
+              })
+              export class ExampleGuard implements CanActivate {
+                canActivateChild(
+                  next: ActivatedRouteSnapshot,
+                  state: RouterStateSnapshot
+                ): Observable<boolean> | Promise<boolean> | boolean {
+                  return true;
+                }
+              }
+              ```
+            </textarea>
+          </section>
+
+          <section data-markdown>
+            <textarea data-template>
+              ## Can Deactivate
+
+              This will only resolve the next route if the return value is true.
+
+              ```
+              export interface CanComponentDeactivate {
+                canDeactivate: () => Observable<boolean> | Promise<boolean> | boolean;
+              }
+               
+              @Injectable({
+                providedIn: 'root'
+              })
+              export class CanDeactivateGuard
+                    implements CanDeactivate<CanComponentDeactivate> {
+
+                canDeactivate(component: CanComponentDeactivate) {
+                  return (
+                    component.canDeactivate ?
+                    component.canDeactivate() : true
+                  );
+                }
+              }
+              ```
+            </textarea>
+          </section>
+
+          <section data-markdown>
+            <textarea data-template>
+              ## Notice the return types the canActivate accepts
+
+              ```
+              Observable<boolean> | Promise<boolean> | boolean
+              ```
+              
+              That's right! We can return a boolean observable! This will come in handy when fetching data <!-- .element: class="fragment" -->
+            </textarea>
+          </section>
+        </section>
+
+        <section>
+          <section data-markdown>
+            <textarea data-template>
+              # Demo Time!
             </textarea>
           </section>
         </section>
